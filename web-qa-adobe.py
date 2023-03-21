@@ -18,13 +18,10 @@ import openai
 import numpy as np
 from sklearn.metrics.pairwise import cosine_distances
 
-################################################################################
-# Need to update this so that it only gets the body of the Adobe documentation pages
-# Otherwise the training date is full of header and footer information, which we don't need
-################################################################################
-
 # set openai api key
-openai.api_key = "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"
+with open('openai_api.key', 'r') as file:
+    my_key = file.read().replace('\n', '')
+openai.api_key = my_key
 
 # Regex pattern to match a URL
 HTTP_URL_PATTERN = r'^http[s]*://.+'
