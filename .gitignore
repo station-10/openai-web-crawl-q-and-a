@@ -2,6 +2,10 @@
 api_key.txt
 *.key
 
+# folders
+processed/
+text/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
