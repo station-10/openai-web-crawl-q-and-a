@@ -7,3 +7,7 @@ It is almost entirely copied from [this example app](https://github.com/openai/o
 ## How to run
 
 To run these examples, you'll need an OpenAI account and associated API key (create a free account)[https://beta.openai.com/signup].
+
+## To do list
+
+- [ ] Update it to run on the Chat-GPT model

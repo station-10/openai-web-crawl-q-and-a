@@ -483,3 +483,48 @@ print(answer_question(
     df,
     question="What does the 'edgeConfigId' part of the alloy 'configure' command represent?",
     debug=False))
+
+################################################################################
+# Step 14 - WORK IN PROGRESS
+################################################################################
+# Experimenting with the GPT-3.5 version of the api
+# see discussion here around how to use embeddings and context with the new version of the api
+# https://community.openai.com/t/how-can-i-use-embeddings-with-chat-gpt-3-5-turbo/86759/24
+
+
+def answer_question_gpt_3_5(
+    question="placeholder question",
+    max_len=1800,
+    size="ada",
+    debug=False,
+):
+    context = create_context(
+        question,
+        df,
+        max_len=max_len,
+        size=size,
+    )
+    # If debug, print the raw model response
+    if debug:
+        print("Context:\n" + context)
+        print("\n\n")
+
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": f"You are a helpful assistant. Answer the question based on the context below, and if the question can't be answered based on the context, say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:"},
+                {"role": "user", "content": question},
+            ]
+        )
+        return response["choices"][0]["message"]["content"]
+    except Exception as e:
+        print(e)
+        return ""
+
+
+# call the GPT-3.5 function
+print(answer_question_gpt_3_5(
+    df,
+    question="What does the 'edgeConfigId' part of the alloy 'configure' command represent?",
+    debug=False))
