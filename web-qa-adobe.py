@@ -229,9 +229,9 @@ for file in os.listdir("text/" + domain + "/"):
     with open("text/" + domain + "/" + file, "r", encoding="UTF-8") as f:
         text = f.read()
 
-        # Omit the first 11 lines and the last 4 lines, then replace -, _, and #update with spaces.
+        # replace '-' and '_' with spaces.
         texts.append(
-            (file[11:-4].replace('-', ' ').replace('_', ' ').replace('#update', ''), text))
+            (file.replace('-', ' ').replace('_', ' '), text))
 
 # Create a dataframe from the list of texts
 df = pd.DataFrame(texts, columns=['fname', 'text'])
@@ -389,7 +389,7 @@ df['embeddings'] = df['embeddings'].apply(convert_to_array)
 df.head()
 
 ################################################################################
-# Step 12
+# Step 12 - Answer a question using GPT-3
 ################################################################################
 
 
@@ -474,18 +474,14 @@ def answer_question(
         print(e)
         return ""
 
-################################################################################
-# Step 13
-################################################################################
-
 
 print(answer_question(
     df,
-    question="What does the 'edgeConfigId' part of the alloy 'configure' command represent?",
+    question="How do you handle page flicker when loading the AEP Web SDK asynchronously?",
     debug=False))
 
 ################################################################################
-# Step 14 - WORK IN PROGRESS
+# Step 12b - Answer the question using GPT-3.5 (ChatGPT)
 ################################################################################
 # Experimenting with the GPT-3.5 version of the api
 # see discussion here around how to use embeddings and context with the new version of the api
@@ -493,6 +489,7 @@ print(answer_question(
 
 
 def answer_question_gpt_3_5(
+    df,
     question="placeholder question",
     max_len=1800,
     size="ada",
@@ -513,7 +510,7 @@ def answer_question_gpt_3_5(
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": f"You are a helpful assistant. Answer the question based on the context below, and if the question can't be answered based on the context, say \"I don't know\"\n\nContext: {context}\n\n---\n\nQuestion: {question}\nAnswer:"},
+                {"role": "system", "content": f"You are a helpful assistant. Answer the question based on the context below, and if the question can't be answered based on the context, say \"I don't know\"\n\nContext: {context}\n"},
                 {"role": "user", "content": question},
             ]
         )
@@ -526,5 +523,5 @@ def answer_question_gpt_3_5(
 # call the GPT-3.5 function
 print(answer_question_gpt_3_5(
     df,
-    question="What does the 'edgeConfigId' part of the alloy 'configure' command represent?",
+    question="How do you handle page flicker when loading the AEP Web SDK asynchronously?",
     debug=False))
